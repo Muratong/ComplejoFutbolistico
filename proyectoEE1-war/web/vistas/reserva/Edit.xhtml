@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta> 
+        <meta charset="utf-8"></meta>
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"></meta>
+        <meta content="" name="description"></meta>
+        <meta content="width=device-width, initial-scale=1" name="viewport"></meta>
+        <link href="resources/css/bootstrap.css" rel="stylesheet"></link>
+        <link href="resources/css/main.css" rel="stylesheet"></link>
+        <style type="text/css">
+            .ui-layout, .ui-layout-doc, .ui-layout-unit, .ui-layout-wrap, .ui-layout-bd, .ui-layout-hd{
+                border: none;
+            }
+        </style>
+        <style>
+            .panelEncabezado.ui-panelgrid>*>tr,
+            .panelEncabezado.ui-panelgrid .ui-panelgrid-cell {
+                border: none; padding-bottom: 0;padding-top: 0;
+            }
+        </style>
+    </h:head>
+
+    <ui:composition>
+
+        <p:dialog id="ReservaEditDlg" widgetVar="ReservaEditDialog" modal="false" resizable="false" appendTo="@(body)" header="Modificar reserva">
+            <h:form id="ReservaEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="1" rendered="#{reservaControlador.reserva != null}" styleClass="panelEncabezado">
+
+                        <p:selectOneMenu id="menuComplejos"  panelStyle="width: 100px" value="#{complejoControlador.selected.comId}" required="true"
+                                         style="width:100%; padding-right: 0px; font-size: 14px" requiredMessage="Seleccione un complejo">
+                            <f:selectItem itemLabel="Complejo" noSelectionOption="true" />
+                            <f:selectItems value="#{complejoControlador.items}" var="complejo" itemLabel="#{complejo.comNombre}" itemValue="#{complejo.comId}" />
+                            <f:ajax event="change" listener="#{complejoControlador.canchasPorComplejo}" 
+                                    render="menuCanchas" execute="@this" />
+                            <f:ajax event="change" listener="#{complejoControlador.recuperarComplejo}" execute="@this" />
+                        </p:selectOneMenu>
+                        <br/>
+                        <p:selectOneMenu id="menuCanchas"  panelStyle="width: 100px" value="#{canchaResControlador.selected.canId}" required="true"
+                                         style="width:100%; padding-right: 0px; font-size: 14px" validatorMessage="Seleccione una cancha" >  
+                            <f:selectItem itemLabel="Cancha" noSelectionOption="true" />
+                            <f:selectItems value="#{complejoControlador.listaCanchas}" var="cancha" 
+                                           itemLabel="#{cancha.canNumero} - #{cancha.canTipo.canTipDescripcion}" itemValue="#{cancha.canId}">
+                            </f:selectItems> 
+                            <f:ajax event="change" listener="#{canchaResControlador.recuperarCancha}" execute="@this" />
+                        </p:selectOneMenu>
+                        <br/>
+                        <p:column>
+                            <p:outputLabel  value="Inicio:" style="color:  #cc3300;font-weight: bold"/>
+                            <p:calendar size="30" style="margin-right: 5px" pattern="dd/MM/yyyy HH:mm" locale="es" effect="slide"
+                                        value="#{reservaUtil.fechaSeleccionada}" mindate="#{reservaUtil.fechaSeleccionada}"  showMinute="false" >
+                                <p:ajax event="dateSelect" listener="#{reservaControlador.fechaInicialSelect}"/>
+                            </p:calendar>
+                        </p:column>
+                        <br/>
+                        <p:column>
+                            <p:outputLabel value="Finalizacion:" style="color:  #cc3300;font-weight: bold"/>
+                            <p:calendar size="23" pattern="dd/MM/yyyy HH:mm" locale="es" mindate="#{reservaUtil.fechaSeleccionada}" effect="slide"
+                                        value="#{reservaUtil.fechaSeleccionada}" showMinute="false" >
+                                <p:ajax event="dateSelect" listener="#{reservaControlador.fechaFinalSelect}"/>
+                            </p:calendar>
+                        </p:column>  
+                        <p:column>
+                            <br/>
+                            <p:commandButton actionListener="#{reservaControlador.modificarReserva()}" value="Guardar" update="display,:ReservaListForm:datalist,:growl" 
+                                             oncomplete="handleSubmit(args, 'ReservaEditDialog');" onstart="PF('ReservaEditDialog').hide();"/>
+                            <p:commandButton value="Cancelar" onclick="ReservaEditDialog.hide()"/>
+                        </p:column>
+                    </p:panelGrid>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/plantilla/template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListCanchaTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+
+            <p:panel header="Gestion de Canchas">
+
+                <h:form id="formCancha">
+                    <ui:repeat id="datalist" value="#{canchaControlador.items}" var="cancha" >
+                        <h:panelGrid columns="2" style="width:50%" columnClasses="logo,detail" width="400">
+                            <p:commandLink update=":formCancha:canchaDetalle" oncomplete="PF('carDialog').show()">
+                                <f:setPropertyActionListener value="#{cancha}" target="#{canchaControlador.selected}" />
+                                <p:graphicImage name="/img/Icono_Cancha.png" /> 
+                            </p:commandLink>
+
+                            <p:outputPanel>
+                                <h:panelGrid columns="2" cellpadding="5">
+                                    <h:outputText value="Complejo:" style="font-weight: bold; font-size: 13px "/>
+                                    <h:outputText value="#{cancha.canComplejo.comNombre}" style="font-size: 13px "/>
+                                    
+                                    <h:outputText value="Numero:" style="font-weight: bold; font-size: 13px "/>
+                                    <h:outputText value="#{cancha.canNumero} - #{cancha.canTipo.canTipDescripcion}" style="font-size: 13px "/>
+
+                                    <h:outputText value="Precio dia:"  style="font-weight: bold; font-size: 13px"/>
+                                    <h:outputText value="#{cancha.canTipo.cantipprecioDia}" style="font-size: 13px "/>
+
+                                    <h:outputText value="Precio noche:" style="font-weight: bold; font-size: 13px"/>
+                                    <h:outputText value="#{cancha.canTipo.cantipprecioNoche}" style="font-size: 13px "/>
+                                </h:panelGrid>
+                            </p:outputPanel>
+                        </h:panelGrid>
+                        <hr />
+                    </ui:repeat>
+
+                    <p:dialog header="Cancha" widgetVar="carDialog"  showEffect="blind" hideEffect="explode" resizable="false" draggable="false">
+                        <p:outputPanel id="canchaDetalle" style="text-align:center;">
+                            <p:panelGrid  columns="2" rendered="#{not empty canchaControlador.selected}" columnClasses="label,value">
+                                <f:facet name="header">
+                                    <p:graphicImage name="img/Icono_Cancha.png"/> 
+                                </f:facet>
+
+                                <h:outputText value="Numero:" style="font-weight: bold"/>
+                                <h:outputText value="#{canchaControlador.selected.canNumero}" />
+
+                                <h:outputText value="Descripcion" style="font-weight: bold"/>
+                                <h:outputText value="#{canchaControlador.selected.canTipo.canTipDescripcion}" />
+
+                                <h:outputText value="Capacidad:" style="font-weight: bold"/>
+                                <h:outputText value="#{canchaControlador.selected.canTipo.canTipCapacidad}" />
+
+                                <h:outputText value="Precio de dia" style="font-weight: bold"/>
+                                <h:outputText value="$#{canchaControlador.selected.canTipo.cantipprecioDia}" />
+
+                                <h:outputText value="Precio de noche" style="font-weight: bold"/>
+                                <h:outputText value="$#{canchaControlador.selected.canTipo.cantipprecioNoche}" />
+                            </p:panelGrid>
+                        </p:outputPanel>
+                    </p:dialog>
+
+                </h:form>
+
+                <f:facet name="footer">
+                    <div align="center">
+                        <h:form >
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{canchaControlador.prepareCreate}" update=":CanchaCreateForm" oncomplete="PF('CanchaCreateDialog').show()"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":CanchaEditForm" oncomplete="PF('CanchaEditDialog').show()" disabled="#{empty canchaControlador.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{canchaControlador.destroy()}" update=":growl,formCancha" disabled="#{empty canchaControlador.selected}"/>
+                        </h:form>
+                    </div>
+                </f:facet>
+
+            </p:panel>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+
+        </ui:define>
+    </ui:composition>
+
+</html>

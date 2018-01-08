@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CanchaTipoCreateDlg" widgetVar="CanchaTipoCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateCanchaTipoTitle}">
+            <h:form id="CanchaTipoCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{canchaTipoController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateCanchaTipoLabel_canTipId}" for="canTipId" />
+                        <p:inputText id="canTipId" value="#{canchaTipoController.selected.canTipId}" title="#{bundle.CreateCanchaTipoTitle_canTipId}" required="true" requiredMessage="#{bundle.CreateCanchaTipoRequiredMessage_canTipId}"/>
+                        <p:outputLabel value="#{bundle.CreateCanchaTipoLabel_canTipDescripcion}" for="canTipDescripcion" />
+                        <p:inputText id="canTipDescripcion" value="#{canchaTipoController.selected.canTipDescripcion}" title="#{bundle.CreateCanchaTipoTitle_canTipDescripcion}" />
+                        <p:outputLabel value="#{bundle.CreateCanchaTipoLabel_canTipCapacidad}" for="canTipCapacidad" />
+                        <p:inputText id="canTipCapacidad" value="#{canchaTipoController.selected.canTipCapacidad}" title="#{bundle.CreateCanchaTipoTitle_canTipCapacidad}" />
+                        <p:outputLabel value="#{bundle.CreateCanchaTipoLabel_canTipPrecio}" for="canTipPrecio" />
+                        <p:inputText id="canTipPrecio" value="#{canchaTipoController.selected.canTipPrecio}" title="#{bundle.CreateCanchaTipoTitle_canTipPrecio}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{canchaTipoController.create}" value="#{bundle.Save}" update="display,:CanchaTipoListForm:datalist,:growl" oncomplete="handleSubmit(args,'CanchaTipoCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="CanchaTipoCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

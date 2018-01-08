@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <script src="resources/js/vendor/modernizr-2.8.3.min.js"></script>
+        <script src="resources/js/vendor/bootstrap.js"></script>
+        <script src="resources/js/main.js"></script>
+    </h:head>    
+    
+    <ui:composition template="/plantilla/template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListComplejoTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+
+            <h:form id="formComplejo" >
+
+                <p:carousel id="datalist" value="#{complejoControlador.items}" headerText="Gestión de Complejos" var="complejo" 
+                            itemStyle="text-align:center" responsive="true" >
+                    <p:panelGrid  columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" 
+                                  styleClass="ui-panelgrid-blank" >
+                
+                        <f:facet name="header">
+                            <p:commandLink update=":formComplejo:complejoDetalle" oncomplete="PF('complejoDialog').show()" 
+                                           >
+                                <f:setPropertyActionListener value="#{complejo}" target="#{complejoControlador.selected}" />
+                                <h:graphicImage value="http://localhost:8080/proyectoEE1-war/upload/#{complejo.comImg}"
+                                                height="300" width="300" />
+                                <p:ajax  listener="#{complejo.comImg}" update="editButton deleteButton"/>
+                            </p:commandLink>
+                        </f:facet>
+
+                        <h:outputText value="Nombre:" style="font-weight: bold; font-size: 13px"/>
+                        <h:outputText value="#{complejo.comNombre}" style="font-size: 13px" />
+
+                        <h:outputText value="Dirección" style="font-weight: bold; font-size: 13px"/>
+                        <h:outputText value="#{complejo.comDireccion}" style=" font-size: 13px"/>
+
+                        <h:outputText value="Teléfono:" style="font-weight: bold; font-size: 13px"/>
+                        <h:outputText value="#{complejo.comTelefono}" style="font-size: 13px"/>
+
+                    </p:panelGrid>
+
+                    <f:facet name="footer" >
+                        <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{complejoControlador.prepareCreate}" update=":ComplejoCreateForm" oncomplete="PF('ComplejoCreateDialog').show()"/>
+                        <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":ComplejoEditForm" oncomplete="PF('ComplejoEditDialog').show()" disabled="#{empty complejoControlador.selected}"/>
+                        <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{complejoControlador.destroy()}" update=":growl,datalist" disabled="#{empty complejoControlador.selected}"/>
+                    </f:facet>
+                </p:carousel>
+
+                <p:dialog header="Complejo" widgetVar="complejoDialog" showEffect="fade" hideEffect="fade" resizable="false" draggable="false">
+                    <p:outputPanel id="complejoDetalle" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty complejoControlador.selected}" columnClasses="label,value">
+                            <f:facet name="header">
+                                <h:graphicImage value="http://localhost:8080/proyectoEE1-war/upload/#{complejoControlador.selected.comImg}"
+                                                height="200" width="200" />
+                            </f:facet>
+                            <h:outputText value="Nombre:" style="font-weight: bold" />
+                            <h:outputText value="#{complejoControlador.selected.comNombre}" />
+                            <h:outputText value="Direccion" style="font-weight: bold"/>
+                            <h:outputText value="#{complejoControlador.selected.comDireccion}" />
+                            <h:outputText value="Telefono" style="font-weight: bold"/>
+                            <h:outputText value="#{complejoControlador.selected.comTelefono}"/>
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+
+        </ui:define>
+    </ui:composition>
+
+</html>

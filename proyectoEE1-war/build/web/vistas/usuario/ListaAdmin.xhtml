@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/plantilla/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="Usuarios"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="UsuarioListForm">
+                <p:panel header="LISTADO DE ADMINISTRADORES">
+                    <p:dataTable id="datalist" value="#{usuarioControlador.listaAdministradores}" var="item"
+                                 selectionMode="single" selection="#{usuarioControlador.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.usuId}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column rendered="false">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListUsuarioTitle_usuId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.usuId}" style="font-size: 13px"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nombre" style="font-size: 13px"/>
+                            </f:facet>
+                            <h:outputText value="#{item.usuNombre}" style="font-size: 13px"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Apellido" style="font-size: 13px"/>
+                            </f:facet>
+                            <h:outputText value="#{item.usuApellido}" style="font-size: 13px"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Usuario" style="font-size: 13px"/>
+                            </f:facet>
+                            <h:outputText value="#{item.usuUsuario}" style="font-size: 13px"/>
+                        </p:column>
+                        <p:column rendered="false">
+                            <f:facet name="header">
+                                <h:outputText value="Clave" style="font-size: 13px"/>
+                            </f:facet>
+                            <h:outputText value="Clave" style="font-size: 13px"/>
+                        </p:column>
+                        <p:column rendered="false">
+                            <f:facet name="header">
+                                <h:outputText value="Estado"/>
+                            </f:facet>
+                            <h:outputText value="#{item.usuEstado}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Email" style="font-size: 13px"/>
+                            </f:facet>
+                            <h:outputText value="#{item.usuEmail}" style="font-size: 13px"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Fecha alta" style="font-size: 13px"/>
+                            </f:facet>
+                            <h:outputText value="#{item.usuFecAlta}" style="font-size: 13px"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{usuarioControlador.prepareCreate}" update=":UsuarioCreateForm" oncomplete="PF('UsuarioCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":UsuarioViewForm" oncomplete="PF('UsuarioViewDialog').show()" disabled="#{empty usuarioControlador.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":UsuarioEditForm" oncomplete="PF('UsuarioEditDialog').show()" disabled="#{empty usuarioControlador.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{usuarioControlador.destroy}" update=":growl,datalist" disabled="#{empty usuarioControlador.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

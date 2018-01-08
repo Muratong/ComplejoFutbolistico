@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="UsuarioCreateDlg" widgetVar="UsuarioCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="Nuevo usuario">
+            <h:form id="UsuarioCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{usuarioControlador.selected != null}">
+                        <p:outputLabel value="Nombre:" for="usuNombre" style="font-weight: bold"/>
+                        <p:inputText id="usuNombre" value="#{usuarioControlador.selected.usuNombre}" title="#{bundle.CreateUsuarioTitle_usuNombre}"
+                                     required="true" requiredMessage="#{bundle.CreateUsuarioRequiredMessage_usuId}" style="width: 96%"/>
+                        <p:outputLabel value="Apellido:" for="usuApellido" style="font-weight: bold"/>
+                        <p:inputText id="usuApellido" value="#{usuarioControlador.selected.usuApellido}" title="#{bundle.CreateUsuarioTitle_usuApellido}"  
+                                     required="true" requiredMessage="#{bundle.CreateUsuarioRequiredMessage_usuId}" style="width: 96%"/>
+                        <p:outputLabel value="Usuario:" for="usuUsuario" style="font-weight: bold"/>
+                        <p:inputText id="usuUsuario" value="#{usuarioControlador.selected.usuUsuario}" title="#{bundle.CreateUsuarioTitle_usuUsuario}" 
+                                     required="true" requiredMessage="#{bundle.CreateUsuarioRequiredMessage_usuId}" style="width: 96%"/>
+                        <p:outputLabel value="Clave:" for="usuClave" style="font-weight: bold"/>
+                        <p:inputText id="usuClave" value="#{usuarioControlador.selected.usuClave}" title="#{bundle.CreateUsuarioTitle_usuClave}" 
+                                     required="true" requiredMessage="#{bundle.CreateUsuarioRequiredMessage_usuId}" style="width: 96%"/>
+                        <p:outputLabel value="Email:" for="usuEmail" style="font-weight: bold"/>
+                        <p:inputText id="usuEmail" value="#{usuarioControlador.selected.usuEmail}" title="#{bundle.CreateUsuarioTitle_usuEmail}" 
+                                     required="true" requiredMessage="#{bundle.CreateUsuarioRequiredMessage_usuId}" style="width: 96%"/>
+                        <p:outputLabel value="Valoracion:" for="usuValoracion" style="font-weight: bold"/>
+                        <p:inputText id="usuValoracion" value="#{usuarioControlador.selected.usuValoracion}" title="#{bundle.CreateUsuarioTitle_usuValoracion}" style="width: 96%"/>
+                        <p:outputLabel value="Rol:" for="usuRol" style="font-weight: bold"/>
+                        <p:selectOneMenu id="usuRol" value="#{usuarioControlador.selected.usuRol}" style="width: 88%">
+                            <f:selectItems value="#{rolControlador.itemsAvailableSelectOne}"
+                                           var="usuRolItem"
+                                           itemValue="#{usuRolItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{usuarioControlador.create}" value="#{bundle.Save}" update="display,:UsuarioListForm:datalist,:growl" oncomplete="handleSubmit(args,'UsuarioCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="UsuarioCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

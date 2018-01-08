@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta> 
+        <meta charset="utf-8"></meta>
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"></meta>
+        <meta content="" name="description"></meta>
+        <meta content="width=device-width, initial-scale=1" name="viewport"></meta>
+        <link href="resources/css/bootstrap.css" rel="stylesheet"></link>
+        <link href="resources/css/main.css" rel="stylesheet"></link>
+        <style>
+            .panelEncabezado.ui-panelgrid>*>tr,
+            .panelEncabezado.ui-panelgrid .ui-panelgrid-cell {
+                border: none; padding-bottom: 0;padding-top: 0;
+            }
+        </style>
+    </h:head>
+ 
+    <h:body>
+        <p:panelGrid columns="6" style="width: 100%" styleClass="panelEncabezado" 
+                     columnClasses="column1,column2,column3,column4,column5,column6">
+            <p:column />
+            <p:column  >
+                <p:graphicImage library="img" name="logo.jpg"/>
+            </p:column>  
+            <style type="text/css">
+                .column1{width: 90px;height:auto}
+                .column2{width: 50px;height:auto}
+                .column3{width: 1px;height:auto}
+                .column4{width: 800px;height:auto}
+                .column5{width: 410px;height:auto}
+                .column6{width: 450px;height:auto}
+            </style>
+            <h:form>
+                <p:outputLabel value="Complejo Futbolistico" style="font-weight: bold; font-size: 30px;"/> 
+                <br/>
+                <p:outputLabel value="Disfruta de tu pasión!" style="font-weight: normal"/> 
+            </h:form>
+        </p:panelGrid>
+        <h:form>
+            <p:panel style="background-color: #0d0d0d; background-image: none;height: 45px"/>
+        </h:form>
+        <h:outputScript library="js" name="calendar_es.js"/>
+        <br/><br/><br/><br/>
+        <h:form id="confirmacionForm">
+            <div align="center">
+                <h4>
+                    Esta reserva ya fue confirmada!
+                    <br/><br/>
+                    <p:graphicImage library="img" name="reservaYaConfirmada.png" width="150" height="150"/>
+                    <br/><br/>
+                </h4>
+                <p:button outcome="/index.xhtml" value="Salir" style="font-size: 14px"/>
+            </div>
+        </h:form>
+    </h:body>
+</html>

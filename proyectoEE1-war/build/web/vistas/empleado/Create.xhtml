@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EmpleadoCreateDlg" widgetVar="EmpleadoCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="Nuevo empleado">
+            <h:form id="EmpleadoCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{empleadoControlador.selected != null}">
+                        <p:outputLabel value="Nombre:" for="empNombre" style="font-weight: bold"/>
+                        <p:inputText id="empNombre" value="#{empleadoControlador.selected.empNombre}" title="#{bundle.CreateEmpleadoTitle_empNombre}" required="true" requiredMessage="#{bundle.CreateEmpleadoRequiredMessage_empId}"/>
+                        <p:outputLabel value="Apellido:" for="empApellido" style="font-weight: bold"/>
+                        <p:inputText id="empApellido" value="#{empleadoControlador.selected.empApellido}" title="#{bundle.CreateEmpleadoTitle_empApellido}" required="true" requiredMessage="#{bundle.CreateEmpleadoRequiredMessage_empId}"/>
+                        <p:outputLabel value="Dni:" for="empDni" style="font-weight: bold"/>
+                        <p:inputText id="empDni" value="#{empleadoControlador.selected.empDni}" title="#{bundle.CreateEmpleadoTitle_empDni}" />
+                        <p:outputLabel value="Domicilio:" for="empDomicilio" style="font-weight: bold"/>
+                        <p:inputText id="empDomicilio" value="#{empleadoControlador.selected.empDomicilio}" title="#{bundle.CreateEmpleadoTitle_empDomicilio}" />
+                        <p:outputLabel value="Telefono:" for="empTelefono" style="font-weight: bold"/>
+                        <p:inputText id="empTelefono" value="#{empleadoControlador.selected.empTelefono}" title="#{bundle.CreateEmpleadoTitle_empTelefono}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{empleadoControlador.create()}" value="#{bundle.Save}" update="display,:EmpleadoListForm:datalist,:growl" oncomplete="handleSubmit(args,'EmpleadoCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="EmpleadoCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

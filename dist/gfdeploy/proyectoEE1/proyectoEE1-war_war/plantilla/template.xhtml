@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title><ui:insert name="title">Default Title</ui:insert></title>
+        <h:outputStylesheet library="css" name="jsfcrud.css"/>
+        <h:outputStylesheet library="css" name="default.css"/>
+        <h:outputScript library="js" name="jsfcrud.js"/>
+        <!-- ESTILO PARA QUITAR BORDE Y PADDING A LOS LAYAOUT UNIT-->
+        <style type="text/css">
+            .ui-layout, .ui-layout-doc, .ui-layout-unit, .ui-layout-wrap, .ui-layout-bd, .ui-layout-hd{
+                border: none;padding: 0;
+            }
+        </style>
+        <!-- ESTILO PARA QUITAR BORDE Y PADDING A LAS CELDAS DE LAS COLUMNAS-->
+        <style>
+            .panelEncabezado.ui-panelgrid>*>tr,
+            .panelEncabezado.ui-panelgrid .ui-panelgrid-cell {
+                border: none; padding-bottom: 0;padding-top: 0; margin-top: 0;
+            }
+        </style>
+        <!-- ESTILO PARA QUITAR BORDE Y PADDING A LOS ELEM Q ESTAN DENTRO D UN DIV COMO UN PANEL -->
+        <style>
+            .footer.ui-layout-pane .ui-layout-unit-content.ui-widget-content {
+                background-color: #FFFFFF;
+                padding: 0px;
+            }
+            .footer.ui-corner-all {
+                border-radius: 0px;
+                border-bottom-left-radius: 0px;
+                border-bottom-right-radius: 0px;
+                border-top-left-radius: 0px;
+                border-top-right-radius: 0px;
+            }
+            .footer.ui-widget-content {
+                background-color: #FFFFFF;
+                padding: 0px;
+            }
+        </style>
+    </h:head>
+
+    <h:body >
+        <p:growl id="growl" life="3000" />
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" >
+                <h:graphicImage library="img" name="encabezado.png" alt="imagen" width="100%"></h:graphicImage>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" header="Menu de opciones" resizable="true" size="220" 
+                          minSize="200" maxSize="250" style="padding-left: 25px; padding-top: 20px" collapsible="true">
+                <p:panel id="basic" class="ui-panel" >
+                    <h:form id="menuForm">
+                        <p:menu toggleable="true" style="font-size: 13px; border: none; ">
+                            <p:submenu label="Complejos" style="font-size: 13px; width: 180px">
+                                <p:menuitem value="Complejos" outcome="/vistas/complejo/List.xhtml" icon="ui-icon-home" style="font-size: 13px; padding-right: 20px;" />
+                                <p:menuitem value="Canchas" outcome="/vistas/cancha/List.xhtml"  icon="ui-icon-grip-solid-horizontal" style="font-size: 13px ; padding-right: 20px;"/>
+                                <p:menuitem value="Servicios" outcome="/vistas/servicio/List.xhtml" icon="ui-icon-gear" style="font-size: 13px; padding-right: 20px;"/>
+                                <p:menuitem value="Empleados" outcome="/vistas/empleado/List.xhtml" icon="ui-icon-person" style="font-size: 13px; padding-right: 20px;"/>
+                            </p:submenu>
+                            <p:submenu label="Reservas" style="font-size: 13px; width: 180px">
+                                <p:menuitem value="Agenda" outcome="/vistas/reserva/ReservasAdmin.xhtml" icon="ui-icon-calendar" style="font-size: 13px; padding-right: 20px;"/>
+                                <p:menuitem value="Reservas" outcome="/vistas/reserva/ListadoReservas.xhtml" icon="ui-icon-clock" style="font-size: 13px; padding-right: 20px;"/>
+                            </p:submenu>
+                            <p:submenu label="Usuarios" style="font-size: 13px; width: 180px">
+                                <p:menuitem value="Clientes" outcome="/vistas/usuario/List.xhtml" icon="ui-icon-person" style="font-size: 13px; padding-right: 20px;"/>
+                                <p:menuitem value="Administrador" outcome="/vistas/usuario/ListaAdmin.xhtml" ajax="false" icon="ui-icon-suitcase" style="font-size: 13px; padding-right: 20px;"/>
+                            </p:submenu>
+                        </p:menu>
+                    </h:form>
+                </p:panel>
+                <div style="margin-bottom: 20px"></div>
+                <p:separator/>
+                <h:form>
+                    <b>Usuario: </b>
+                    <p:outputLabel value="#{sesionControlador.selected.usuUsuario}"/>
+                    <p:commandButton value="Salir" icon="ui-icon-extlink" style="margin-left: 20px" 
+                                     actionListener="#{sesionControlador.cerrarSesion()}" action="/index?faces-redirect=true"/>
+                </h:form>
+            </p:layoutUnit>
+            <style>
+                .ui-panel {font-size: 25px}
+            </style>
+
+            <p:layoutUnit position="south" size="25" style="background-color: #dbdbdb">
+                <ui:insert name="footer" />
+                <div  align="center" style="font-size: 12px; padding-top: 3px">
+                    Complejo Futbolistico @2017 Todos los derechos reservados.
+                </div>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center" style="padding-right: 20px; padding-top: 15px;padding-left: 15px">
+                <ui:insert name="body"/>
+            </p:layoutUnit>
+
+        </p:layout>
+    </h:body>
+
+</html>

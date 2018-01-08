@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta> 
+        <meta charset="utf-8"></meta>
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"></meta>
+        <meta content="" name="description"></meta>
+        <meta content="width=device-width, initial-scale=1" name="viewport"></meta>
+        <link href="resources/css/bootstrap.css" rel="stylesheet"></link>
+        <link href="resources/css/main.css" rel="stylesheet"></link>
+        <style>
+            .panelEncabezado.ui-panelgrid>*>tr,
+            .panelEncabezado.ui-panelgrid .ui-panelgrid-cell {
+                border: none; padding-bottom: 0;padding-top: 0;
+            }
+        </style>
+        
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{reservaControlador.confirmarReserva()}"/>
+        </f:metadata>
+    </h:head>
+ 
+    <h:body>
+        <p:panelGrid columns="6" style="width: 100%" styleClass="panelEncabezado" 
+                     columnClasses="column1,column2,column3,column4,column5,column6">
+            <p:column />
+            <p:column  >
+                <p:graphicImage library="img" name="logo.jpg"/>
+            </p:column>  
+            <style type="text/css">
+                .column1{width: 90px;height:auto}
+                .column2{width: 50px;height:auto}
+                .column3{width: 1px;height:auto}
+                .column4{width: 800px;height:auto}
+                .column5{width: 210px;height:auto}
+                .column6{width: 250px;height:auto}
+            </style>
+            <h:form>
+                <p:outputLabel value="Complejo Futbolistico" style="font-weight: bold; font-size: 30px;"/> 
+                <br/>
+                <p:outputLabel value="Disfruta de tu pasión!" style="font-weight: normal"/> 
+            </h:form>
+            <h:form >
+                <h5>
+                    <p:graphicImage library="img" name="icono-futbolista.png"/>
+                    <p:outputLabel value="Usuario: "/>
+                    <p:outputLabel value="#{usuarioControlador.selected.usuUsuario}" style="font-weight: normal"/>
+                </h5>
+            </h:form>
+            <h:form>
+                <p:commandButton id="botonMenu" type="button" value="opciones" icon="ui-icon-gear" style="font-size: 13px"/>
+                <p:menu overlay="true" trigger="botonMenu" my="left top" at="left bottom"  >
+                    <p:menuitem value="Mi perfil" icon="ui-icon-person" outcome="/vistas/complejo/List.xhtml" style="font-size: 13px"/> 
+                    <p:menuitem value="Mis reservas" icon="ui-icon-clock" outcome="/vistas/reserva/ListaReserva.xhtml" style="font-size: 13px"/>
+                    <p:menuitem value="Cerrar sesion" icon="ui-icon-extlink" style="font-size: 13px" 
+                                actionListener="#{usuarioControlador.cerrarSesion()}" action="/index?faces-redirect=true"/> 
+                </p:menu>
+            </h:form>
+        </p:panelGrid>
+        <h:form>
+            <p:panel style="background-color: #0d0d0d; background-image: none;height: 45px"/>
+        </h:form>
+        <h:outputScript library="js" name="calendar_es.js"/>
+        <br/><br/><br/><br/>
+        <h:form id="confirmacionForm">
+            <div align="center">
+                <h4>
+                    Gracias por confirmar tu reserva!
+                    <br/><br/>
+                    <p:graphicImage library="img" name="icono-reserva.png"/>
+                    <br/><br/>
+                    <h5>El codigo de reserva es: </h5>
+                    <p:outputLabel value="#{reservaControlador.idReserva}"/> 
+                    <br/>
+                </h4>
+                <br/>
+                <p:button outcome="/consultaReserva.xhtml" value="Continuar" style="font-size: 14px"/>
+            </div>
+        </h:form>
+    </h:body>
+</html>

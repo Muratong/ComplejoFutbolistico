@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta> 
+        <meta charset="utf-8"></meta>
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"></meta>
+        <meta content="" name="description"></meta>
+        <meta content="width=device-width, initial-scale=1" name="viewport"></meta>
+        <link href="resources/css/bootstrap.css" rel="stylesheet"></link>
+        <link href="resources/css/main.css" rel="stylesheet"></link>
+        <style type="text/css">
+            .ui-layout, .ui-layout-doc, .ui-layout-unit, .ui-layout-wrap, .ui-layout-bd, .ui-layout-hd{
+                border: none;
+            }
+        </style>
+        <style>
+            .panelEncabezado.ui-panelgrid>*>tr,
+            .panelEncabezado.ui-panelgrid .ui-panelgrid-cell {
+                border: none; padding-bottom: 0;padding-top: 0;
+            }
+        </style>
+    </h:head>
+
+    <ui:composition template="/plantilla/template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Reserva de canchas"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:outputScript library="js" name="calendar_es.js"/>
+            <f:view>
+                <h:form id="reservasForm">
+                    <p:growl id="messages" showDetail="true" />
+                    <h:panelGrid columnClasses="value" >
+                        <p:panel id="toggleable" header="GESTION DE RESERVAS" toggleable="true" closable="false" toggleSpeed="500"
+                                 closeSpeed="500" widgetVar="panel" style="margin-bottom:20px;">
+                            <p:ajax event="toggle" update="messages" />
+                            <h:panelGrid columns="20" cellpadding="10">
+                                <p:column/><p:column/><p:column/>
+                                <p:graphicImage library="img" name="icono-sede.png" height="50" width="50" />
+                                <p:selectOneMenu id="menuComplejos"  panelStyle="width: 100px" value="#{complejoControlador.selected.comId}" required="true"
+                                                 style="width:200px; padding-right: 0px; font-size: 14px" requiredMessage="Seleccione un complejo">
+                                    <f:selectItem itemLabel="Complejo" noSelectionOption="true" />
+                                    <f:selectItems value="#{complejoControlador.items}" var="complejo" itemLabel="#{complejo.comNombre}" itemValue="#{complejo.comId}" />
+                                    <f:ajax event="change" listener="#{complejoControlador.canchasPorComplejo}" 
+                                            render="menuCanchas" execute="@this" />
+                                    <f:ajax event="change" listener="#{complejoControlador.recuperarComplejo}" execute="@this" />
+                                </p:selectOneMenu>
+                                <p:column/><p:column/><p:column/>
+                                <p:graphicImage library="img" name="icono-cancha1.jpg" height="40" width="40" />
+                                <p:selectOneMenu id="menuCanchas"  panelStyle="width: 100px" value="#{canchaResControlador.selected.canId}" required="true"
+                                                 style="width:200px; padding-right: 0px; font-size: 14px" validatorMessage="Seleccione una cancha" >  
+                                    <f:selectItem itemLabel="Cancha" noSelectionOption="true" />
+                                    <f:selectItems value="#{complejoControlador.listaCanchas}" var="cancha" 
+                                                   itemLabel="#{cancha.canNumero} - #{cancha.canTipo.canTipDescripcion}" itemValue="#{cancha.canId}">
+                                    </f:selectItems> 
+                                    <f:ajax event="change" listener="#{canchaResControlador.recuperarCancha}" execute="@this" />
+                                </p:selectOneMenu>
+
+                                <div align="center">
+                                    <p:growl id="msgs" showDetail="true" />
+                                    <p:graphicImage library="img" name="icono-fecha.png" height="50" width="50" />
+                                    <p:calendar id="button" value="#{reservaUtil.fechaSeleccionada}" placeholder="Fecha" locale="es" required="true"
+                                                pattern="dd/MM/yyyy" effect="slide" size="26" style="font-size: 14px" mindate="#{reservaUtil.today}">
+                                        <p:ajax event="dateSelect" listener="#{reservaUtil.fechaSelect}" update="agenda"/>
+                                        <f:ajax event="click" listener="#{scheduleView.cargarReservasAdmin}" immediate="true"/>
+                                    </p:calendar>
+                                </div>
+                            </h:panelGrid>
+                            <f:facet name="options"></f:facet>
+                        </p:panel>
+                        <p:schedule id="agenda" style="font-size: 15px; padding-left: 15px; padding-right: 5px" 
+                                    value="#{scheduleView.eventModel}" widgetVar="myschedule" styleClass="custom" rightHeaderTemplate=""
+                                    timeZone="GMT-3" locale="es" allDaySlot="false" view="agendaWeek" centerHeaderTemplate=""
+                                    firstHour="15" minTime="#{scheduleView.minTime}" maxTime="#{scheduleView.maxTime}"
+                                    axisFormat="HH:mm" timeFormat="HH:mm" columnFormat="ddd D/M" class="fc-time-grid-container" aspectRatio="0.25"
+                                    initialDate="#{reservaUtil.fechaSeleccionada}">
+                            <p:ajax event="dateSelect" listener="#{scheduleView.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+                            <p:ajax event="dateSelect" listener="#{reservaUtil.fechaSelect}" />
+                            <p:ajax event="eventSelect" listener="#{scheduleView.onEventSelect}" update="panelReserva" oncomplete="PF('tomarReserva').show();"/>
+                        </p:schedule> 
+                    </h:panelGrid>
+                    <style>
+                        .fc-time-grid-container {
+                            height: auto !important;
+                        }
+                        .fc-today  /* deja el color de la fecha actual en blanco */
+                        {
+                            background-image: linear-gradient(to bottom, #FFFFFF, #FFFFFF) !important;
+                        } 
+                    </style>
+                    <p:dialog widgetVar="eventDialog" header="Reservar" showEffect="clip" hideEffect="clip" resizable="false" draggable="true">
+                        <h:panelGrid id="eventDetails" columns="1">
+                            <p:column>
+                                <p:outputLabel for="complejo" value="Complejo: " style="color:  #cc3300;font-weight: bold" />
+                                <p:outputLabel id="complejo" value="#{complejoControlador.selected.comNombre}"/>
+                            </p:column>
+                            <br/>
+                            <p:column>
+                                <p:outputLabel for="cancha" value="Cancha: " style="color:  #cc3300;font-weight: bold"/>
+                                <p:outputLabel id="cancha" value="#{canchaResControlador.selected.canNumero} - 
+                                               #{canchaResControlador.selected.canTipo.canTipDescripcion}" />
+                            </p:column>
+                            <br/>
+                            <p:column>
+                                <p:selectOneMenu id="menuClientes" value="#{usuarioControlador.selected}" 
+                                                 style="width:100%; padding-right: 0px ">  
+                                    <f:selectItem itemLabel="Cliente" />
+                                    <f:selectItems value="#{usuarioControlador.listaClientes}" var="cliente"  itemLabel="#{cliente.usuUsuario}" />  
+                                    <f:ajax event="change" listener="#{reservaUtil.clienteSeleccionado}" execute="@this" />
+                                </p:selectOneMenu>
+                            </p:column>
+                            <br/>
+                            <p:column>
+                                <p:outputLabel  value="Inicio: " style="font-weight: bold"/>
+                                <p:calendar size="31" pattern="dd/MM/yyyy HH:mm" locale="es" effect="slide"
+                                            value="#{reservaUtil.fechaSeleccionada}" mindate="#{reservaUtil.fechaSeleccionada}"  showMinute="false" >
+                                    <p:ajax event="dateSelect" listener="#{reservaControlador.fechaInicialSelect}"/>
+                                </p:calendar>
+                            </p:column>
+                            <br/>
+                            <p:column>
+                                <p:outputLabel value="Finalizacion: " style="font-weight: bold"/>
+                                <p:calendar size="24" pattern="dd/MM/yyyy HH:mm" locale="es" mindate="#{reservaUtil.fechaSeleccionada}" effect="slide"
+                                            value="#{reservaUtil.fechaSeleccionada}" showMinute="false" >
+                                    <p:ajax event="dateSelect" listener="#{reservaControlador.fechaFinalSelect}"/>
+                                </p:calendar>
+                            </p:column>
+                        </h:panelGrid>
+                        <f:facet name="footer" >
+                            <div align="right">
+                                <p:growl id="avisoReserva" showDetail="true" />
+                                <p:commandButton id="addButton" value="Reservar" actionListener="#{scheduleView.addEventAdmin}" 
+                                                 onstart="PF('eventDialog').hide();" update="avisoReserva,agenda"
+                                                 oncomplete="PF('myschedule').update();"> 
+                                    <f:ajax event="click" listener="#{reservaControlador.hacerReservaAdmin}" immediate="true"/>
+                                </p:commandButton>
+                            </div>  
+                        </f:facet>
+                    </p:dialog>
+                    <p:dialog widgetVar="tomarReserva" showEffect="puff" hideEffect="puff" resizable="false" draggable="false" 
+                              class="ui-dialog" header="Tomar">
+                        <p:growl id="msjTomarReserva" showDetail="true"/>
+                        <p:panelGrid id="panelReserva" style="border: none" columns="2" columnClasses="left,right" class="panelEncabezado">
+                            <p:panel style="border: none">
+                                <br/>
+                                <p:outputLabel value="Codigo reserva: " style="font-weight: bold;"/>
+                                <p:outputLabel value="#{scheduleView.codigoReserva}"/>
+                                <br/><br/>
+                                <p:outputLabel value="Cliente: " style="font-weight: bold;" />
+                                <p:outputLabel value="#{scheduleView.reserva.resUsu.usuUsuario}" />
+                                <br/><br/>
+                                <p:outputLabel value="Estado reserva: " style="font-weight: bold;"/>
+                                <p:outputLabel value="#{scheduleView.reserva.resEstado.estResEstado}"/>
+                                <br/><br/>
+                                <f:facet name="footer" >
+                                    <div align="center">
+                                        <p:commandButton value="Tomar reserva" update="msjTomarReserva,agenda" oncomplete="PF('myschedule').update();"
+                                                         onstart="PF('tomarReserva').hide();" actionListener="#{scheduleView.tomarReserva()}">
+                                            <f:ajax event="click" listener="#{scheduleView.cargarReservasAdmin}" immediate="true"/>
+                                            <f:ajax render="agenda"/>
+                                        </p:commandButton>
+                                    </div>
+                                </f:facet>
+                            </p:panel>
+                        </p:panelGrid>
+                    </p:dialog>
+                    <style type="text/css">
+                        .ui-dialog ui-dialog-titlebar {
+                            display:none !important;}
+                        </style>
+                    </h:form>
+                </f:view>
+            </ui:define>
+        </ui:composition>
+        <style type="text/css">
+        .value {
+            width: 1000px;
+        }
+    </style>
+
+</html>

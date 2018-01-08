@@ -1,0 +1,534 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta> 
+        <meta charset="utf-8"></meta>
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"></meta>
+        <meta content="" name="description"></meta>
+        <meta content="width=device-width, initial-scale=1" name="viewport"></meta>
+
+        <link href="resources/css/bootstrap.css" rel="stylesheet"></link>
+        <link href="resources/css/main.css" rel="stylesheet"></link>
+        <h:outputScript library="js" name="calendar_es.js"/>
+
+        <script src="resources/js/vendor/modernizr-2.8.3.min.js"></script>
+        <script src="resources/js/vendor/bootstrap.js"></script>
+    </h:head>
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{sesionControlador.cerrarSesion()}"/>
+    </f:metadata>
+
+    <body>
+        <!-- ENCABEZADO RESPONSIVO -->
+        <header>   
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8 ">
+                        <a href="#">
+                            <img align="left" alt="" class="adaptarLogo" src="resources/img/logo.jpg"/>
+                        </a>
+                        <h1 class="espaciado">
+                            Complejo Futbolistico
+                        </h1>
+                        <h4 class="espaciado">
+                            Disfruta de tu pasion!
+                        </h4>
+                    </div>
+                    <div class="hidden-xs col-sm-6 col-md-4 col-lg-4 centrar">
+                        <a href="#">
+                            <img alt="" src="resources/img/facebook-32.png"/>
+                        </a>
+                        <a href="#">
+                            <img alt="" src="resources/img/google-32.png"/>
+                        </a>
+                        <a href="#">
+                            <img alt="" src="resources/img/twitter-32.png"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- BARRA DE NAVEGACION -->
+        <nav class="navbar navbar-inverse" role="navigation">
+            <div class="navbar-header">
+                <!-- BOTONCITO PARA DESPLEGAR -->
+                <button class="navbar-toggle" data-target=".navbar-ex1-collapse" data-toggle="collapse" type="button">
+                    <span class="sr-only">
+                        Cambiar Navegacion
+                    </span>
+                    <span class="icon-bar">
+                    </span>
+                    <span class="icon-bar">
+                    </span>
+                    <span class="icon-bar">
+                    </span>
+                </button>
+                <a class="navbar-brand" href="#">
+                </a>
+            </div>
+            <!-- MENUS -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav navbar-right alinearMenu">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Servicios
+                            <b class="caret">
+                            </b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">
+                                    Quincho
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    Asadores
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    Vestuarios
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    Gimnasio
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            Galeria
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">Contacto</a>
+                    </li>
+                    <li>
+                        <h:outputLink  value="javascript:void(0)" onclick="PF('dlgRegistro').show();" title="registro" >
+                            Registrar  
+                        </h:outputLink>
+                    </li>
+                    <li>
+                        <h:outputLink   value="javascript:void(0)" onclick="PF('dlgIngreso').show();" title="login" >
+                            Ingresar      
+                        </h:outputLink>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- MODAL DE REGISTRO -->
+        <h:form id="formRegistro"> 
+
+            <p:growl id="growl" sticky="true" showDetail="true" life="200" />
+            <p:dialog id="registrar" header="Registro de usuario"  widgetVar="dlgRegistro" showEffect="puff" hideEffect="scale" resizable="false" draggable="false" style="size: 650px" modal="true">
+                <h:panelGrid columns="1" cellpadding="15"  id="panelRegistrar" rendered="#{usuarioControlador.selected != null}" style="border: 0px" >
+                    <br/>
+                    <p:inputText id="usuario"  placeholder="Nombre de Usuario" value="#{usuarioControlador.selected.usuUsuario}" required="true" 
+                                 requiredMessage="El campo usuario es requerido" label="username" size="40" />
+                    <br/>
+                    <p:password id="clave" placeholder="Clave" value="#{usuarioControlador.selected.usuClave}" required="true" 
+                                requiredMessage="El campo clave es requerido" label="password" size="40" />
+                    <br/>
+                    <p:inputText id="nombre" value="#{usuarioControlador.selected.usuNombre}" placeholder="Nombre" required="true" 
+                                 requiredMessage="El campo nombre es requerido" label="password" size="40" />
+                    <br/>
+                    <p:inputText id="apellido" value="#{usuarioControlador.selected.usuApellido}" placeholder="Apellido" required="true"
+                                 requiredMessage="El campo apellido es requerido" label="password" size="40" />
+                    <br/>
+                    <p:inputText id="email" value="#{usuarioControlador.selected.usuEmail}" placeholder="Email" required="true"
+                                 requiredMessage="El campo email es requerido" label="password" size="40" />
+                    <br/>
+                    <p:inputText id="telefono" value="#{usuarioControlador.selected.usuFecAlta}" placeholder="Telefono"
+                                 label="password" size="40" />
+                    <br/>
+                    <p:inputText id="rol" value="#{usuarioControlador.selected.usuRol}" placeholder="rol" rendered="false"
+                                 label="password" size="40" >
+                    </p:inputText>
+                </h:panelGrid>
+                <f:facet name="footer" >
+                    <div align="right" >
+                        <p:commandButton value="Registrar" update="formRegistro:panelRegistrar,growl" actionListener="#{usuarioControlador.create()}"
+                                         oncomplete="PF('dlgRegistro').hide();" 
+                                         style="background-image:none; background-color: #0066ff; color: #ffffff ">
+                        </p:commandButton>
+
+                    </div>
+                </f:facet>  
+            </p:dialog>
+        </h:form>
+        <!-- MODAL DE LOGUEO -->
+        <h:form>            
+            <p:growl id="growlLogin" showDetail="true" life="3000" />
+
+            <p:dialog id="ingresar" header="Ingresar al sistema"  widgetVar="dlgIngreso" showEffect="blind" hideEffect="drop" resizable="false" draggable="false" style="size: 650px" modal="true">
+                <h:panelGrid columns="1" cellpadding="15" >
+                    <br/>
+                    <p:inputText id="username" value="#{sesionControlador.nomUsu}" placeholder="Nombre de usuario" required="true" label="username" size="40" />
+                    <br/>
+                    <p:password id="password" value="#{sesionControlador.claveUsu}" placeholder="Clave" required="true" label="password" size="40" />
+                    <br/>
+                    <a href="">Crear una cuenta</a>
+                </h:panelGrid>
+                <f:facet name="footer" >
+                    <div align="right" >
+                        <p:commandButton value="Ingresar" update="growlLogin" action="#{sesionControlador.login()}"
+                                         style="background-image:none; background-color: #009933; color: #ffffff " >
+                        </p:commandButton>
+                    </div>
+                </f:facet>  
+            </p:dialog>
+        </h:form>
+        <!--  SEDE, DATEPICKER, HORARIO y BOTON RESERVA-->
+        <section>
+            <div class="container">
+                <legend class="text-center">
+                    <h1 align="center" style="color: black">
+                        Reserva tu Cancha
+                    </h1>
+                </legend>
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <div align="center" class="form-group selectContainer">
+                            <div class="hidden-xs col-sm-3 col-md-6 col-lg-6">
+                                <br>
+                                    <br>
+                                        <img src="resources/img/logIn1.png" style="padding-left: 50%">
+                                        </img>
+                                    </br>
+                                </br>
+                            </div>
+                            <div align="center" style="width: 100%; padding-right: 15px; font-size: 18px">
+                                <p:outputLabel style="text-align: center">Ingresa al sistema</p:outputLabel>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <div class=" selectContainer form-group ">
+                            <div class="hidden-xs col-sm-3 col-md-6 col-lg-6">
+                                <br>
+                                    <br>
+                                        <img src="resources/img/icono-sede.png" style="padding-left: 50%">
+                                        </img>
+                                    </br>
+                                </br>
+                            </div>
+                            <div align="center" style="width: 100%; padding-right: 30px; font-size: 18px">
+                                <p:outputLabel style="text-align: center">Selecciona el complejo</p:outputLabel>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <div class="form-group selectContainer ">
+                            <div class="hidden-xs col-sm-3 col-md-6 col-lg-6">
+                                <br>
+                                    <br>
+                                        <img src="resources/img/icono-fecha.png" style="padding-left: 50%">
+                                        </img>
+                                    </br>
+                                </br>
+                            </div>
+                            <div class="bootstrap-iso">
+                                <div align="center" style="width: 100%; padding-right: 30px; font-size: 18px">
+                                    <p:outputLabel style="text-align: center">Selecciona el dia</p:outputLabel>
+                                </div>                                  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <div class=" selectContainer form-group ">
+                            <div class="hidden-xs col-sm-3 col-md-6 col-lg-6">
+                                <br>
+                                    <br>
+                                        <img src="resources/img/icono-reserva.png" style="padding-left: 50%">
+                                        </img>
+                                    </br>
+                                </br>
+                            </div>
+                            <div align="center" style="width: 100%; padding-right: 15px; font-size: 18px">
+                                <p:outputLabel style="text-align: center">Reserva tu cancha!</p:outputLabel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <br/>
+        <div class="container">
+            <!-- CIRCULITOS ABAJO DE LA IMAGEN -->
+            <section class="carousel slide" id="miSlide">
+                <ol class="carousel-indicators">
+                    <li class="active" data-slide-to="0" data-target="#miSlide">
+                    </li>
+                    <li data-slide-to="1" data-target="#miSlide">
+                    </li>
+                    <li data-slide-to="2" data-target="#miSlide">
+                    </li>
+                </ol>
+                <!-- IMAGENES DEL SLIDER -->
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <img class="adaptar" src="resources/img/imagen3.png">
+                        </img>
+                    </div>
+                    <div class="item">
+                        <img class="adaptar" src="resources/img/imagen1.png">
+                        </img>
+                    </div>
+                    <div class="item">
+                        <img class="adaptar" src="resources/img/imagen2.png">
+                        </img>
+                    </div>
+                </div>
+                <a class="left carousel-control" data-slide="prev" href="#miSlide">
+                    <span class="glyphicon glyphicon-chevron-left">
+                    </span>
+                </a>
+                <a class="right carousel-control" data-slide="next" href="#miSlide">
+                    <span class="glyphicon glyphicon-chevron-right">
+                    </span>
+                </a>
+            </section>
+            <br/>
+            <!-- CONTENIDOS PERSONALIZADOS-->
+            <section>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        <div class="row">
+                            <div class="hidden-xs col-sm-3 col-md-6 col-lg-6">
+                                <br>
+                                    <br>
+                                        <img src="resources/img/badoo-64.png">
+                                        </img>
+                                    </br>
+                                </br>
+                            </div>
+                            <div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
+                                <h3>
+                                    Titulo de la imagen
+                                </h3>
+                                <hr>
+                                    <p align="justify">
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci modi, eligendi, nulla laborum illo laudantium voluptatibus porro provident non, pariatur, aspernatur. Autem omnis eligendi vel et, facilis similique, voluptatibus? Eveniet!
+                                        <br>
+                                            <a href="#">
+                                                leer mas
+                                            </a>
+                                        </br>
+                                    </p>
+                                </hr>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        <div class="row">
+                            <div class="hidden-xs col-sm-3 col-md-6 col-lg-6">
+                                <br>
+                                    <br>
+                                        <img src="resources/img/android-64.png">
+                                        </img>
+                                    </br>
+                                </br>
+                            </div>
+                            <div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
+                                <h3>
+                                    Titulo de la imagen
+                                </h3>
+                                <hr>
+                                    <p align="justify">
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto aliquid nemo iure incidunt voluptates magnam rem velit aperiam ea architecto quas reprehenderit tenetur vitae, eum, earum consectetur at optio! Repellat.
+                                        <br>
+                                            <a href="#">
+                                                leer mas
+                                            </a>
+                                        </br>
+                                    </p>
+                                </hr>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        <div class="row">
+                            <div class="hidden-xs col-sm-3 col-md-6 col-lg-6">
+                                <br>
+                                    <br>
+                                        <img src="resources/img/email-64.png">
+                                        </img>
+                                    </br>
+                                </br>
+                            </div>
+                            <div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
+                                <h3>
+                                    Titulo de la imagen
+                                </h3>
+                                <hr>
+                                    <p align="justify">
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. In labore eum facilis! Dolores voluptatum praesentium, vel nostrum minima voluptatem cupiditate impedit sint velit magnam sapiente accusamus quae! Quaerat similique, repellat?
+                                        <br>
+                                            <a href="#">
+                                                leer mas
+                                            </a>
+                                        </br>
+                                    </p>
+                                </hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <br>
+        </br>
+        <section class="">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+                        <br>
+                            <br>
+                                <video class="img-reponsive" controls="">
+                                    <source src="resources/video/chañar2.mp4" type="video/mp4">
+                                    </source>
+                                </video>
+                            </br>
+                        </br>
+                    </div>
+                    <div align="justify" class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                        <a href="" name="video">
+                            <h3>
+                                Introcuccion al video
+                            </h3>
+                        </a>
+                        <hr>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus voluptatum debitis illum ad! Natus totam suscipit, culpa, cupiditate et sapiente quibusdam nesciunt esse, possimus fugiat veniam adipisci dignissimos laudantium, labore!
+                            </p>
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        Tema 1
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        Tema 2
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        Tema 3
+                                    </a>
+                                </li>
+                            </ul>
+                        </hr>
+                    </div>
+                </div>
+            </div>
+            <br>
+            </br>
+        </section>
+        <section class="">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                        <h3 class="">
+                            Servicios
+                        </h3>
+                        <br>
+                            <a href="#">
+                                Quincho
+                            </a>
+                            <br>
+                                <a href="">
+                                    Asadores
+                                </a>
+                                <a href="">
+                                </a>
+                                <a href="">
+                                </a>
+                            </br>
+                        </br>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                        <h3 class="">
+                            Servicios
+                        </h3>
+                        <br>
+                            <a href="#">
+                                Quincho
+                            </a>
+                            <br>
+                                <a href="#">
+                                    Asadores
+                                </a>
+                                <a href="#">
+                                </a>
+                                <a href="#">
+                                </a>
+                            </br>
+                        </br>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                        <h3 class="">
+                            Servicios
+                        </h3>
+                        <br>
+                            <a href="#">
+                                Quincho
+                            </a>
+                            <br>
+                                <a href="#">
+                                    Asadores
+                                </a>
+                                <a href="#">
+                                </a>
+                                <a href="#">
+                                </a>
+                            </br>
+                        </br>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                        <h3 class="">
+                            Servicios
+                        </h3>
+                        <br>
+                            <a href="#">
+                                Quincho
+                            </a>
+                            <br>
+                                <a href="#">
+                                    Asadores
+                                </a>
+                                <a href="#">
+                                </a>
+                                <a href="#">
+                                </a>
+                            </br>
+                        </br>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="color1">
+            <div align="center" class="container">
+                <br>
+                    <p>
+                       Complejo Futbolistico @2017 Todos los derechos reservados.
+                    </p>
+                </br>
+            </div>
+        </footer>
+    </body>
+    <!-- ESTE SCRIPT SI O SI AL FINAL PARA Q FUNCIONE EL MOVIMIENTO DEL CAROULSEL -->
+    <script src="resources/js/main.js"></script>
+    
+</html>

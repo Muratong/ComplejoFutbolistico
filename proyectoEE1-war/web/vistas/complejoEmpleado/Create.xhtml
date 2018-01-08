@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ComplejoEmpleadoCreateDlg" widgetVar="ComplejoEmpleadoCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateComplejoEmpleadoTitle}">
+            <h:form id="ComplejoEmpleadoCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{complejoEmpleadoController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateComplejoEmpleadoLabel_comEmpId}" for="comEmpId" />
+                        <p:inputText id="comEmpId" value="#{complejoEmpleadoController.selected.comEmpId}" title="#{bundle.CreateComplejoEmpleadoTitle_comEmpId}" required="true" requiredMessage="#{bundle.CreateComplejoEmpleadoRequiredMessage_comEmpId}"/>
+                        <p:outputLabel value="#{bundle.CreateComplejoEmpleadoLabel_comEmpFecIngreso}" for="comEmpFecIngreso" />
+                        <p:inputText id="comEmpFecIngreso" value="#{complejoEmpleadoController.selected.comEmpFecIngreso}" title="#{bundle.CreateComplejoEmpleadoTitle_comEmpFecIngreso}" />
+                        <p:outputLabel value="#{bundle.CreateComplejoEmpleadoLabel_comEmpFecEgreso}" for="comEmpFecEgreso" />
+                        <p:inputText id="comEmpFecEgreso" value="#{complejoEmpleadoController.selected.comEmpFecEgreso}" title="#{bundle.CreateComplejoEmpleadoTitle_comEmpFecEgreso}" />
+                        <p:outputLabel value="#{bundle.CreateComplejoEmpleadoLabel_comEmIdEmp}" for="comEmIdEmp" />
+                        <p:selectOneMenu id="comEmIdEmp" value="#{complejoEmpleadoController.selected.comEmIdEmp}" >
+                            <f:selectItems value="#{empleadoController.itemsAvailableSelectOne}"
+                                           var="comEmIdEmpItem"
+                                           itemValue="#{comEmIdEmpItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateComplejoEmpleadoLabel_comEmpIdCom}" for="comEmpIdCom" />
+                        <p:selectOneMenu id="comEmpIdCom" value="#{complejoEmpleadoController.selected.comEmpIdCom}" >
+                            <f:selectItems value="#{complejoController.itemsAvailableSelectOne}"
+                                           var="comEmpIdComItem"
+                                           itemValue="#{comEmpIdComItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{complejoEmpleadoController.create}" value="#{bundle.Save}" update="display,:ComplejoEmpleadoListForm:datalist,:growl" oncomplete="handleSubmit(args,'ComplejoEmpleadoCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="ComplejoEmpleadoCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

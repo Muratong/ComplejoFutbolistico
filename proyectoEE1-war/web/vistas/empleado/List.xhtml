@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/plantilla/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="Empleados"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="EmpleadoListForm">
+                <p:panel header="LISTA DE EMPLEADOS">
+                    <p:dataTable id="datalist" value="#{empleadoControlador.items}" var="item"
+                                 selectionMode="single" selection="#{empleadoControlador.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.empId}"
+                                 rows="10"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column rendered="false">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListEmpleadoTitle_empId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.empId}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nombre" style="font-size: 13px"/>
+                            </f:facet>
+                            <h:outputText value="#{item.empNombre}" style="font-size: 13px"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Apellido" style="font-size: 13px"/>
+                            </f:facet>
+                            <h:outputText value="#{item.empApellido}" style="font-size: 13px"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Dni" style="font-size: 13px"/>
+                            </f:facet>
+                            <h:outputText value="#{item.empDni}" style="font-size: 13px"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Domicilio" style="font-size: 13px"/>
+                            </f:facet>
+                            <h:outputText value="#{item.empDomicilio}" style="font-size: 13px"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Telefono" style="font-size: 13px"/>
+                            </f:facet>
+                            <h:outputText value="#{item.empTelefono}" style="font-size: 13px"/>
+                        </p:column>
+                         <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Email" style="font-size: 13px"/>
+                            </f:facet>
+                             <h:outputText value="#{item.empEmail}" style="font-size: 13px"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{empleadoControlador.prepareCreate}" update=":EmpleadoCreateForm" oncomplete="PF('EmpleadoCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":EmpleadoViewForm" oncomplete="PF('EmpleadoViewDialog').show()" disabled="#{empty empleadoControlador.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":EmpleadoEditForm" oncomplete="PF('EmpleadoEditDialog').show()" disabled="#{empty empleadoControlador.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{empleadoControlador.destroy()}" update=":growl,datalist" disabled="#{empty empleadoControlador.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+            
+        </ui:define>
+    </ui:composition>
+
+</html>

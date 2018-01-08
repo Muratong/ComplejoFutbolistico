@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="UsuarioEditDlg" widgetVar="UsuarioEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditUsuarioTitle}">
+            <h:form id="UsuarioEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{usuarioControlador.selected != null}">
+                        <p:outputLabel value="#{bundle.EditUsuarioLabel_usuId}" for="usuId" style="font-weight: bold"/>
+                        <p:inputText id="usuId" value="#{usuarioControlador.selected.usuId}" title="#{bundle.EditUsuarioTitle_usuId}" required="true" requiredMessage="#{bundle.EditUsuarioRequiredMessage_usuId}"/>
+                        <p:outputLabel value="#{bundle.EditUsuarioLabel_usuNombre}" for="usuNombre" style="font-weight: bold"/>
+                        <p:inputText id="usuNombre" value="#{usuarioControlador.selected.usuNombre}" title="#{bundle.EditUsuarioTitle_usuNombre}" />
+                        <p:outputLabel value="#{bundle.EditUsuarioLabel_usuApellido}" for="usuApellido" style="font-weight: bold"/>
+                        <p:inputText id="usuApellido" value="#{usuarioControlador.selected.usuApellido}" title="#{bundle.EditUsuarioTitle_usuApellido}" />
+                        <p:outputLabel value="#{bundle.EditUsuarioLabel_usuUsuario}" for="usuUsuario" style="font-weight: bold"/>
+                        <p:inputText id="usuUsuario" value="#{usuarioControlador.selected.usuUsuario}" title="#{bundle.EditUsuarioTitle_usuUsuario}" />
+                        <p:outputLabel value="#{bundle.EditUsuarioLabel_usuClave}" for="usuClave" style="font-weight: bold"/>
+                        <p:inputText id="usuClave" value="#{usuarioControlador.selected.usuClave}" title="#{bundle.EditUsuarioTitle_usuClave}" />
+                        <p:outputLabel value="#{bundle.EditUsuarioLabel_usuEstado}" for="usuEstado" style="font-weight: bold"/>
+                        <p:inputText id="usuEstado" value="#{usuarioControlador.selected.usuEstado}" title="#{bundle.EditUsuarioTitle_usuEstado}" />
+                        <p:outputLabel value="#{bundle.EditUsuarioLabel_usuEmail}" for="usuEmail" style="font-weight: bold"/>
+                        <p:inputText id="usuEmail" value="#{usuarioControlador.selected.usuEmail}" title="#{bundle.EditUsuarioTitle_usuEmail}" />
+                        <p:outputLabel value="Telefono" for="usuFecAlta" style="font-weight: bold"/>
+                        <p:inputText id="usuFecAlta" value="#{usuarioControlador.selected.usuFecAlta}" title="#{bundle.EditUsuarioTitle_usuFecAlta}" />
+                        <p:outputLabel value="#{bundle.EditUsuarioLabel_usuValoracion}" for="usuValoracion" style="font-weight: bold"/>
+                        <p:inputText id="usuValoracion" value="#{usuarioControlador.selected.usuValoracion}" title="#{bundle.EditUsuarioTitle_usuValoracion}" />
+                        <p:outputLabel value="#{bundle.EditUsuarioLabel_usuRol}" for="usuRol" style="font-weight: bold"/>
+                        <p:selectOneMenu id="usuRol" value="#{usuarioControlador.selected.usuRol}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{rolControlador.itemsAvailableSelectOne}"
+                                           var="usuRolItem"
+                                           itemValue="#{usuRolItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{usuarioControlador.update}" value="#{bundle.Save}" update="display,:UsuarioListForm:datalist,:growl" oncomplete="handleSubmit(args, 'UsuarioEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="UsuarioEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta> 
+        <meta charset="utf-8"></meta>
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"></meta>
+        <meta content="" name="description"></meta>
+        <meta content="width=device-width, initial-scale=1" name="viewport"></meta>
+        <link href="resources/css/bootstrap.css" rel="stylesheet"></link>
+        <link href="resources/css/main.css" rel="stylesheet"></link>
+        <h:outputScript library="js" name="calendar_es.js"/>
+        <script src="resources/js/vendor/modernizr-2.8.3.min.js"></script>
+        <script src="resources/js/vendor/bootstrap.js"></script>
+        <script src="resources/js/main.js"></script>
+        <!-- ESTILO PARA QUITAR BORDE Y PADDING A LOS LAYAOUT UNIT-->
+        <style type="text/css">
+            .ui-layout, .ui-layout-doc, .ui-layout-unit, .ui-layout-wrap, .ui-layout-bd, .ui-layout-hd{
+                border: none;padding: 0;
+            }
+        </style>
+        <!-- ESTILO PARA QUITAR BORDE Y PADDING A LAS CELDAS DE LAS COLUMNAS-->
+        <style>
+            .panelEncabezado.ui-panelgrid>*>tr,
+            .panelEncabezado.ui-panelgrid .ui-panelgrid-cell {
+                border: none; padding-bottom: 0;padding-top: 0; margin-top: 0;
+            }
+        </style>
+        <!-- ESTILO PARA QUITAR BORDE Y PADDING A LOS ELEM Q ESTAN DENTRO D UN DIV COMO UN PANEL -->
+        <style>
+            .footer.ui-layout-pane .ui-layout-unit-content.ui-widget-content {
+                background-color: #FFFFFF;
+                padding: 0px;
+            }
+            .footer.ui-corner-all {
+                border-radius: 0px;
+                border-bottom-left-radius: 0px;
+                border-bottom-right-radius: 0px;
+                border-top-left-radius: 0px;
+                border-top-right-radius: 0px;
+            }
+            .footer.ui-widget-content {
+                background-color: #FFFFFF;
+                padding: 0px;
+            }
+        </style>
+
+    </h:head>
+
+    <h:body>
+        <p:growl id="growl" life="3000" />
+        <p:layout fullPage="true" >
+            <p:layoutUnit position="north" size="190" class="footer">
+                <p:panelGrid columns="6" style="width: 100%; padding: 0" styleClass="panelEncabezado" 
+                             columnClasses="column1,column2,column3,column4,column5,column6">
+                    <p:column />
+                    <p:column  >
+                        <p:graphicImage library="img" name="logo.jpg"/>
+                    </p:column>  
+                    <style type="text/css">
+                        .column1{width: 110px;height:auto}
+                        .column2{width: 50px;height:auto}
+                        .column3{width: 1px;height:auto}
+                        .column4{width: 800px;height:auto}
+                        .column5{width: 210px;height:auto}
+                        .column6{width: 250px;height:auto}
+                    </style>
+                    <h:form>
+                        <p:outputLabel value="Complejo Futbolistico" style="font-weight: normal;font-size: 30px;font-family: Helvetica"/> 
+                        <br/>
+                        <p:outputLabel value="Disfruta de tu pasión!" style="font-weight: normal"/> 
+                    </h:form>
+                    <h:form >
+                        <h5>
+                            <p:graphicImage library="img" name="icono-futbolista.png"/>
+                            <p:outputLabel value="Usuario: "/>
+                            <p:outputLabel value="#{sesionControlador.selected.usuUsuario}" style="font-weight: normal"/>
+                        </h5>
+                    </h:form>
+                    <h:form>
+                        <p:commandButton id="botonMenu" type="button" value="opciones" icon="ui-icon-gear" style="font-size: 13px"/>
+                        <p:menu overlay="true" trigger="botonMenu" my="left top" at="left bottom"  >
+                            <p:menuitem value="Mi perfil" icon="ui-icon-person" outcome="/vistas/usuario/perfilCliente.xhtml" 
+                                        actionListener="#{reservaControlador.procesarReservasVencidas()}" style="font-size: 13px"/>
+                            <p:menuitem value="Mis reservas" icon="ui-icon-clock" outcome="/vistas/reserva/ListaReserva.xhtml" style="font-size: 13px"/>
+                            <p:menuitem value="Cerrar sesion" icon="ui-icon-extlink" style="font-size: 13px" 
+                                        actionListener="#{sesionControlador.cerrarSesion()}" action="/index?faces-redirect=true"/> 
+                        </p:menu>
+                    </h:form>
+                </p:panelGrid>
+                <h:form>
+                    <p:panel style="background-color: #0d0d0d; background-image: none;height: 50px; border: none"/>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" size="270" minSize="200" maxSize="270" style="padding-left: 25px" 
+                          header="Consulta" collapsible="true" collapseSize="35">
+
+                <p:panel id="basic" class="ui-panel" style="padding-top: 0px" >
+                    <h:form id="menuForm">
+                        <!--  SEDE, DATEPICKER, HORARIO y BOTON RESERVA-->
+
+                        <p:graphicImage library="img" name="icono-sede.png" height="57" width="57" style="display: block;margin: 0px auto"/>
+                        <div style="padding: 2px"/>
+                        <p:growl id="msgs" showDetail="true" />
+                        <p:selectOneMenu id="menuComplejos"  panelStyle="width: 100px" value="#{complejoControlador.selected.comId}" required="true"
+                                         style="width:100%; padding-right: 0px; font-size: 14px" requiredMessage="Seleccione un complejo">
+                            <f:selectItem itemLabel="Complejo" noSelectionOption="true" />
+                            <f:selectItems value="#{complejoControlador.items}" var="complejo" itemLabel="#{complejo.comNombre}" itemValue="#{complejo.comId}" />
+                            <f:ajax event="change" listener="#{complejoControlador.canchasPorComplejo}" 
+                                    render="menuCanchas" execute="@this" />
+                            <f:ajax event="change" listener="#{complejoControlador.recuperarComplejo}" execute="@this" />
+                        </p:selectOneMenu>
+
+                        <div style="padding: 2px"/>
+                        <p:graphicImage library="img" name="bitmap.png" height="57" width="68" style="display: block;margin: 0px auto"/>
+                        <div style="padding: 3px"/>
+                        <p:selectOneMenu id="menuCanchas"  panelStyle="width: 100px" value="#{canchaResControlador.selected.canId}" required="true"
+                                         style="width:100%; padding-right: 0px; font-size: 14px" validatorMessage="Seleccione una cancha" >  
+                            <f:selectItem itemLabel="Cancha" noSelectionOption="true" />
+                            <f:selectItems value="#{complejoControlador.listaCanchas}" var="cancha" 
+                                           itemLabel="#{cancha.canNumero} - #{cancha.canTipo.canTipDescripcion}" itemValue="#{cancha.canId}">
+                            </f:selectItems> 
+                            <f:ajax event="change" listener="#{canchaResControlador.recuperarCancha}" execute="@this" />
+                        </p:selectOneMenu>
+
+                        <div style="padding: 3px"/>
+                        <p:graphicImage library="img" name="icono-fecha.png" height="55" width="56" style="display: block;margin: 0px auto"/>
+                        <div style="padding: 3px"/>
+                        <h:form id="formCancha" >
+                            <p:growl id="msgs" showDetail="true" />
+                            <p:calendar id="button" value="#{reservaUtil.fechaSeleccionada}" placeholder="Fecha" locale="es" required="true"
+                                        pattern="dd/MM/yyyy" effect="slide" size="26" style="font-size: 14px" mindate="#{reservaUtil.today}">
+                                <p:ajax event="dateSelect" listener="#{reservaUtil.fechaSelect}"/>
+                            </p:calendar>
+                        </h:form>
+                        <div style="padding: 2px"/>
+                        <p:graphicImage library="img" name="icono-reserva.png" height="47" width="47" style="display: block;margin: 0px auto"/>
+                        <div style="padding: 3px"/>
+                        <p:button outcome="/consultaReserva.xhtml" value="Consultar" icon="ui-icon-search" style="width: 100%; font-size: 14px" onclick="#{scheduleView.cargarReservasCliente()}">
+                        </p:button>
+                    </h:form>
+                </p:panel>
+            </p:layoutUnit>
+            <style>
+                .ui-panel {font-size: 25px}
+            </style>
+            <p:layoutUnit position="south" size="30" style=" background-color: #dbdbdb">
+                <ui:insert name="footer" />
+                <div  align="center" style="font-size: 12px">
+                    Complejo Futbolistico @2017 Todos los derechos reservados.
+                </div>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center" style="padding-right: 20px; padding-top: 0px;padding-left: 15px; height: auto" >
+                <ui:insert name="body"/>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+</html>
